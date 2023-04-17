@@ -1,0 +1,18 @@
+.header {
+ margin-right: 25rem;
+ text-align: right;
+}
+
+.divider {
+background-color: black;
+min-height: 4px;
+font-size: 2rem;
+}
+
+/* box class used for testing purposes, remove before project submission */
+.box {
+background-color: lightblue;
+border: 1px solid blue;
+min-height: 50px;
+font-size: 2rem;
+}
