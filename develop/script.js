@@ -5,23 +5,28 @@ var city;
 var queryURL;
 var cityList = JSON.parse(localStorage.getItem("cityList")) || [];
 
+displayCityList();
 
-
-// event listener to add new city searches to city list to be saved to local storage
+// event listener to handle cities that user are searching up.
 $("#submit-btn").on('click', function(event) {
     event.preventDefault();
-
     city = $(this).siblings("#city").val().trim();
     queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
-
-    
     checkValidCity();
-   
 
 })
 
+// event listeners to handle user's clicks on cities from search history list
+$(".city-list").on("click", "button", function(){
+    city = $(this).text();
+    queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
+    checkValidCity();
+})
+
+
+
 function displayCurrentForcast(response) {
-    console.log(response);
+    
     var city = response.name + " ";
 
     //OpenWeather API dt value is the number of seconds since January 1, 1970(Unix epoch) in UTC. We need to multiply it
@@ -61,7 +66,6 @@ function displayCurrentForcast(response) {
     .addClass("col-12")
     .text(humidity);
 
-
     $("#current-city").empty();
     $("#current-city-weather").empty();
     $("#current-city").append(displayCity); 
@@ -71,15 +75,10 @@ function displayCurrentForcast(response) {
     $("#current-city-weather").append(displayWind);
     $("#current-city-weather").append(displayHumidity);
 
-
-    console.log(date);
-
-
 }
 
 
 function displayCityList() {
-
     //.empty() removes all  all child nodes of the set of matched elements from the DOM.
     //if we don't remove, everytime displayCityList is called, cities from the
     // array will be added, resulting in duplication of cities.
@@ -88,6 +87,7 @@ function displayCityList() {
 
     const cityBtn = $('<button>')
     .addClass('btn btn-secondary btn-sm col-12 mt-1')
+    .attr({"id": 'city-btn'})
     .text(value);
 
     $(".city-list").append(cityBtn);
@@ -95,8 +95,6 @@ function displayCityList() {
     });
 }
 
-
-console.log(cityList);
 
 function checkValidCity () {
 
