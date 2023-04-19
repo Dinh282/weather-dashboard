@@ -22,3 +22,5 @@ https://www.vedantu.com/chemistry/kelvin-scale (Help with Kelvin to Fahrenheit c
 https://codingbeautydev.com/blog/javascript-round-number-to-2-decimal-places/#:~:text=December%2011%2C%202022-,To%20round%20a%20number%20to%202%20decimal%20places%20in%20JavaScript,number%20to%202%20decimal%20places. (Help with .toFixed() method for rounding temperature to 2 secimal places)
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString (Help with converting date to look like the format of the mockup)
+
+https://blog.gitguardian.com/leaking-secrets-on-github-what-to-do/?utm_source=alerting&utm_medium=email&utm_campaign=abv10AB (Help with API key leaked on GitHub)

@@ -22,23 +22,54 @@ $("#submit-btn").on('click', function(event) {
 
 function displayCurrentForcast(response) {
     console.log(response);
-    var city = response.name + ' ';
+    var city = response.name + " ";
 
     //OpenWeather API dt value is the number of seconds since January 1, 1970(Unix epoch) in UTC. We need to multiply it
     // by 1000 to convert it to milliseconds since the Unix epoch, to meet the format of JS Data constructor. 
-    var date = new Date(response.dt * 1000) ;
+    var date = new Date(response.dt * 1000).toLocaleDateString('en-US', {month: '2-digit', day:'2-digit', year: 'numeric'});
     //the weather of Openweather response is an array of weather conditions for that city. the first index [0]
     // is of the current weather. 
-    var iconUrl = 'https://openweathermap.org/img/w/' + response.weather[0].icon + '.png';
+    var iconUrl = ' ' + 'https://openweathermap.org/img/w/' + response.weather[0].icon + '.png';
     // we can add "&units=imperial" to our queryURL to get the units in F since openweather provides the temp in F.
     // by default, temperature is given in Kelvin. We could always convert the temp from Kelvin to F with a formula:
     // ((response.main.temp - 273.15) * (9/5) + 32).toFixed(2);
-    var tempF = response.main.temp;
-    var humidity = response.main.humidity;
-    var windSpeed = response.wind.speed;
+    var tempF = "Temperature: " + response.main.temp + " °F";
+    var windSpeed = "Windspeed: " + response.wind.speed + " MPH";
+    var humidity = "Humidity: " + response.main.humidity + " %";
+    
+    const displayCity = $("<div>")
+    .addClass("d-inline-block ")
+    .text(city);
 
-    $("#current-day-container").append(city, date.toLocaleDateString('en-US', {month: '2-digit', day:'2-digit', year: 'numeric'}), iconUrl, tempF, humidity, windSpeed);
+    const displayDate = $("<div>")
+    .addClass("d-inline-block m-2")
+    .text("(" + date + ")");
 
+    const displayIcon = $("<img>")
+    .addClass("d-inline-block")
+    .attr('src', iconUrl);
+
+    const displayTemp = $("<div>")
+    .addClass("col-12")
+    .text(tempF);
+
+    const displayWind = $("<div>")
+    .addClass("col-12")
+    .text(windSpeed);
+
+    const displayHumidity = $("<div>")
+    .addClass("col-12")
+    .text(humidity);
+
+
+    $("#current-city").empty();
+    $("#current-city-weather").empty();
+    $("#current-city").append(displayCity); 
+    $("#current-city").append(displayDate);
+    $("#current-city").append(displayIcon);
+    $("#current-city-weather").append(displayTemp);
+    $("#current-city-weather").append(displayWind);
+    $("#current-city-weather").append(displayHumidity);
 
 
     console.log(date);

@@ -19,7 +19,7 @@
 
     <section class="container mt-2">
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <div >
                     <form>
                     <label for="city" class="form-label"><h2>Search for a City:</h2></label>
@@ -37,12 +37,18 @@
                 </div>
             </div>
 
-            <div class="col-8">
+            <div class="col-9">
                 <!-- selected city and weather goes here-->
-                <div class="box" id="current-day-container"></div>
+                <div class="box col-12" id="current-day-container">
+                    <div class="col" id="current-city"></div>
+
+                    <div class="col-12 row" id="current-city-weather"></div>
+        
+                </div>
+            
                 <h3>5-Day Forecast:</h3>
 
-                <!-- day cards go here -->
+                <!-- 5 day cards go here -->
                 <section >
 
 
