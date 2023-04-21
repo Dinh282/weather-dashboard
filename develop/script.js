@@ -1,6 +1,6 @@
 $(function(){
 
-var APIKey = "53889860b61f2d9730863adfc666746b";
+const APIKey = "53889860b61f2d9730863adfc666746b";
 var city;
 var queryURL;
 var cityList = JSON.parse(localStorage.getItem("cityList")) || [];
@@ -74,7 +74,6 @@ function displayCurrentForcast(response) {
     $("#current-city-weather").append(displayTemp);
     $("#current-city-weather").append(displayWind);
     $("#current-city-weather").append(displayHumidity);
-
 }
 
 
@@ -84,7 +83,7 @@ function displayCityList() {
     // array will be added, resulting in duplication of cities.
     $(".city-list").empty();
     $.each(cityList, function (i, value) {
-
+ 
     const cityBtn = $('<button>')
     .addClass('btn btn-secondary btn-sm col-12 mt-1')
     .attr({"id": 'city-btn'})
@@ -102,7 +101,11 @@ $.ajax({
  url:queryURL,
  method: 'GET',
 success:function (response){
+ 
 
+    var lat = response.coord.lat;
+    var lon = response.coord.lon;
+    console.log("here", lat)
     if(!cityList.includes(city) ){
         cityList.push(city);
         }
@@ -110,10 +113,13 @@ success:function (response){
     localStorage.setItem("cityList", JSON.stringify(cityList));
     displayCityList();
     displayCurrentForcast(response);
+    get5DaysForcast(lat, lon);
+
     // displayFiveDayForcast();
 
     // console.log(response);
     // console.log(queryURL);
+    
 },
 error: function() {
     alert("Not a valid city or error obtaining weather information.")
@@ -124,8 +130,44 @@ error: function() {
 }
 
 
+function get5DaysForcast(lat, lon) {
+const limit = 1;
 
 
+$.ajax({
+// url: `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${limit}&appid=${APIKey}`,
+url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`,
+method: 'GET',
+success:function (response){
+ 
+    console.log(response);
+
+    $.ajax({
+    url: `http://api.openweathermap.org/data/2.5/forecast?lat=${response[0].lat}&lon=${response[0].lon}&appid=${APIKey}`,
+    method:'GET',
+    success:function(response){
+        var date = new Date(response.list[0].dt *1000)
+        console.log(response)
+        for(var i = 7; i < response.list.length ; i += 8)
+        console.log(response.list.length)
+        // if(i > response.list.length){
+        //     i = response.list.length;
+        // }
+        console.log(new Date(response.list[i].dt*1000));
+    
+    }
+
+    })
+
+
+
+
+}
+
+
+});
+
+}
 
 
 
