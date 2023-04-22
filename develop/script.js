@@ -11,7 +11,7 @@ displayCityList();
 $("#submit-btn").on('click', function(event) {
     event.preventDefault();
     city = $(this).siblings("#city").val().trim();
-    queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
+    queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
     checkValidCity();
 
 })
@@ -19,7 +19,7 @@ $("#submit-btn").on('click', function(event) {
 // event listeners to handle user's clicks on cities from search history list
 $(".city-list").on("click", "button", function() {
     city = $(this).text();
-    queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
+    queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
     checkValidCity();
 })
 
@@ -125,7 +125,7 @@ function get5DaysForecast(lat, lon) {
 
     $.ajax({
 
-    url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=imperial`,
+    url: `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=imperial`,
     method: 'GET',
         success:function (response){
             $(".5day-forecast").empty();
