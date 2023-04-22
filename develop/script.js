@@ -17,7 +17,7 @@ $("#submit-btn").on('click', function(event) {
 })
 
 // event listeners to handle user's clicks on cities from search history list
-$(".city-list").on("click", "button", function(){
+$(".city-list").on("click", "button", function() {
     city = $(this).text();
     queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
     checkValidCity();
@@ -97,7 +97,7 @@ function checkValidCity() {
     $.ajax({
     url:queryURL,
     method: 'GET',
-        success:function (response){
+        success:function (response) {
         
             var lat = response.coord.lat;
             var lon = response.coord.lon;
