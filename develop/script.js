@@ -128,7 +128,6 @@ function get5DaysForecast(lat, lon) {
     url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=imperial`,
     method: 'GET',
         success:function (response){
-            console.log(response)
             $(".5day-forecast").empty();
             $(".5day-forecast").append("<h4>5-Day Forecast:</h5>")
             //response yields a list of an array with length of 40. Each index is of the weather for every 3 hours
@@ -145,7 +144,6 @@ function get5DaysForecast(lat, lon) {
 };
 
 function display5DaysForecast(response) {
-    console.log(response)
     var date = new Date(response.dt_txt).toLocaleDateString('en-US', {month: '2-digit', day:'2-digit', year: 'numeric'});
     var iconUrl = 'https://openweathermap.org/img/w/' + response.weather[0].icon + '.png';
     var tempF = "Temp: " + response.main.temp + " °F";
