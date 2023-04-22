@@ -1,10 +1,23 @@
+input {
+    border-width: 2px !important;
+    border-color: rgb(122, 120, 120) !important;
+}
+
 .header {
  text-align: center;
 }
 
 .divider {
 background-color: black;
-min-height: 4px;
+min-height: 3px;
 font-size: 2rem;
 }
 
+.bg-custom {
+background-color: #323d4fff;
+}
+
+.fs-custom {
+font-size: 15px;
+
+}

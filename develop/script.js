@@ -23,10 +23,8 @@ $(".city-list").on("click", "button", function(){
     checkValidCity();
 })
 
-
-
 function displayCurrentForcast(response) {
-    
+  
     var city = response.name + " ";
 
     //OpenWeather API dt value is the number of seconds since January 1, 1970(Unix epoch) in UTC. We need to multiply it
@@ -47,7 +45,7 @@ function displayCurrentForcast(response) {
     .text(city);
 
     const displayDate = $("<h3>")
-    .addClass("d-inline-block ms-2")
+    .addClass("d-inline-block ms-1")
     .text("(" + date + ")");
 
     const displayIcon = $("<img>")
@@ -55,15 +53,15 @@ function displayCurrentForcast(response) {
     .attr('src', iconUrl);
 
     const displayTemp = $("<div>")
-    .addClass("col-12 ms-2")
+    .addClass("col-12 ms-1")
     .text(tempF);
 
     const displayWind = $("<div>")
-    .addClass("col-12 ms-2")
+    .addClass("col-12 ms-1")
     .text(windSpeed);
 
     const displayHumidity = $("<div>")
-    .addClass("col-12 ms-2")
+    .addClass("col-12 mb-2 ms-1")
     .text(humidity);
 
     $("#current-city").empty();
@@ -74,9 +72,8 @@ function displayCurrentForcast(response) {
     $("#current-city-weather").append(displayTemp);
     $("#current-city-weather").append(displayWind);
     $("#current-city-weather").append(displayHumidity);
-    $("#current-day-container").addClass("border border-dark");
+    $("#current-day-container").addClass("border border-dark col col-lg-11 mt-1");
 }
-
 
 function displayCityList() {
     //.empty() removes all  all child nodes of the set of matched elements from the DOM.
@@ -86,7 +83,7 @@ function displayCityList() {
     $.each(cityList, function (i, value) {
  
     const cityBtn = $('<button>')
-    .addClass('btn btn-secondary btn-sm col-12 mt-1')
+    .addClass('btn btn-secondary btn-sm col-12 mt-2 text-dark fw-bolder')
     .attr({"id": 'city-btn'})
     .text(value);
 
@@ -95,95 +92,81 @@ function displayCityList() {
     });
 }
 
+function checkValidCity() {
 
-function checkValidCity () {
-
-$.ajax({
- url:queryURL,
- method: 'GET',
-success:function (response){
- 
-
-    var lat = response.coord.lat;
-    var lon = response.coord.lon;
-    
-    if(!cityList.includes(city) ){
-        cityList.push(city);
-        }
+    $.ajax({
+    url:queryURL,
+    method: 'GET',
+        success:function (response){
         
-    localStorage.setItem("cityList", JSON.stringify(cityList));
-    displayCityList();
-    displayCurrentForcast(response);
-    //we need to call get5DaysForecast() with the lat and lon arguments so we can make an api request within the function.
-    get5DaysForecast(lat, lon);
+            var lat = response.coord.lat;
+            var lon = response.coord.lon;
+            
+            if(!cityList.includes(city) ){
+                cityList.push(city);
+                }
 
-    // displayFiveDayForcast();
-
-    // console.log(response);
-    // console.log(queryURL);
-    
-},
-error: function() {
-    alert("Not a valid city or error obtaining weather information.")
+            localStorage.setItem("cityList", JSON.stringify(cityList));
+            displayCityList();
+            displayCurrentForcast(response);
+            //we need to call get5DaysForecast() with the lat and lon arguments so we can make an api request within the function.
+            get5DaysForecast(lat, lon);
+            
+        },
+            error: function() {
+                alert("Not a valid city or error obtaining weather information.")
+            }
+        });
 }
 
-});
-
-}
-
-
-//we pass in the lat and lon coords to make a request for the forecast. Openweather requries coords to response with forecast
+//we pass in the lat and lon coords to make a request for the forecast. 
+//Openweather requries coords to response 5 days with forecast
 function get5DaysForecast(lat, lon) {
 
-$.ajax({
+    $.ajax({
 
-url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=imperial`,
-method: 'GET',
-success:function (response){
-    $(".5day-forecast").empty();
-    $(".5day-forecast").append("<h4>5-Day Forecast:</h5>")
-    console.log(response);
-    for(var i = 7; i < response.list.length; i += 8){
-    display5DaysForecast(response.list[i]);    
-    // console.log( new Date(response.list[i].dt*1000));
-    // console.log("dt_text", response.list[i].dt_txt );
-}
-}
-})
+    url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=imperial`,
+    method: 'GET',
+        success:function (response){
+            console.log(response)
+            $(".5day-forecast").empty();
+            $(".5day-forecast").append("<h4>5-Day Forecast:</h5>")
+            //response yields a list of an array with length of 40. Each index is of the weather for every 3 hours
+            //throughout the day. we start at index 7 and call for display5DaysForecast() to degenerate the 
+            //cards for the next 5 days. We increment by 8 to make sure we get the hour of the next day each time.
+            for(var i = 7; i <= response.list.length; i += 8){
+                
+            display5DaysForecast(response.list[i]);   
+             
+            }
+        }
+    })
 
 };
 
 function display5DaysForecast(response) {
-console.log("here",response)
-    
-    var date = new Date(response.dt * 1000).toLocaleDateString('en-US', {month: '2-digit', day:'2-digit', year: 'numeric'});
+    console.log(response)
+    var date = new Date(response.dt_txt).toLocaleDateString('en-US', {month: '2-digit', day:'2-digit', year: 'numeric'});
     var iconUrl = 'https://openweathermap.org/img/w/' + response.weather[0].icon + '.png';
-    var tempF = "Temperature: " + response.main.temp + " °F";
-    var windSpeed = "Windspeed: " + response.wind.speed + " MPH";
+    var tempF = "Temp: " + response.main.temp + " °F";
+    var windSpeed = "Wind: " + response.wind.speed + " MPH";
     var humidity = "Humidity: " + response.main.humidity + " %";
 
     //using template literal, we create a card for the weather info in HTML
     var weatherCard = `
-    <div class= "col"
-        <div class= "card"
+    <div class= " col col-lg-2 col-md-4 col-sm-4 bg-custom text-light mx-2 my-2"
+        <div class= "card "
             <div class= "card-body">
-                <h5 class= "card-title"> ${date}</h5>
+                <h5 class= "card-title mt-2"> ${date}</h5>
                 <img src= ${iconUrl}>
-                <p class= "card-text">${tempF}</p>
-                <P class= "card-text">${humidity}</p>
-                <P class= "card-text">${windSpeed}</p>
+                <p class= "card-text fs-custom">${tempF}</p>
+                <P class= "card-text fs-custom">${humidity}</p>
+                <P class= "card-text fs-custom mb-2">${windSpeed}</p>
             </div>
         </div>
     </div>
     `
-
     $(".5day-forecast").append(weatherCard);
-
 }
-
-
-
-
-
 
 });
